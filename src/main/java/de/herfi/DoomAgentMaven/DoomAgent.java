@@ -2,11 +2,14 @@ package de.herfi.DoomAgentMaven;
 import vizdoom.*;
 
 import java.util.*;
+import java.io.IOException;
 import java.lang.*;
+
+
 
 public class DoomAgent {
 
-    public static void main (String[] args) {
+    public static void main (String[] args) throws IOException {
 
         System.out.println("\n\nDOOM AGENT TEST\n");
 
@@ -14,7 +17,7 @@ public class DoomAgent {
         DoomGame game = new DoomGame();
 
         // Sets path to vizdoom engine executive which will be spawned as a separate process. Default is "./vizdoom".
-        game.setViZDoomPath("./doom_bin/vizdoom");
+        game.setViZDoomPath("./doom_bin/vizdoom.exe");
 
         // Sets path to doom2 iwad resource file which contains the actual doom game-> Default is "./doom2.wad".
         game.setDoomGamePath("./doom_bin/freedoom2.wad");
@@ -100,12 +103,13 @@ public class DoomAgent {
             
             // Starts a new episode. It is not needed right after init() but it doesn't cost much and the loop is nicer.
             game.newEpisode();
-
+            AiLearning ai = new AiLearning();
             while (!game.isEpisodeFinished()) {
 
             	// Get the state
                 GameState state = game.getState();
-
+                ai.refreshState(state);
+                
                 int n               = state.number;
                 double[] vars       = state.gameVariables;
                 byte[] screenBuf    = state.screenBuffer;
